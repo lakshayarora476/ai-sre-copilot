@@ -33,7 +33,7 @@ def call_model(question, runbook):
                 "content": prompt
             }
         ],
-        "temperature": 0.2,
+        "temperature": 0.6,
         "max_tokens": 200,
         "stream": False,
     }
@@ -60,10 +60,7 @@ def call_model(question, runbook):
 
 
 ### command to run llama-server for local testing
-# llama-server \
-#   -m /Users/gd06tf/Downloads/personal/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf \
-#   --host 127.0.0.1 \
-#   --port 8080
+# llama-server -m /Users/gd06tf/Downloads/personal/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf --host 127.0.0.1 --port 8080
 
 ## curl command to test llama-server health endpoint
 #curl http://127.0.0.1:8080/health

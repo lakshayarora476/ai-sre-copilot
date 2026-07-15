@@ -2,6 +2,7 @@ import sys
 
 from app.retrieval import read_runbook, select_runbook
 from app.llm_client import call_model, model_exists
+from app.eval_rules import evaluate_answer, get_rules_for_source
 
 def main():
     if len(sys.argv) > 1:
@@ -29,6 +30,14 @@ def main():
         
         final_result = call_model(question, runbook)
         print(final_result)
+        print("Evaluation:")
+        rules = get_rules_for_source(runbook_path.name)
+
+        if rules is not None:
+            eval_result = evaluate_answer(final_result,runbook_path.name, rules)
+            print(eval_result)
+        else:
+            print ("no evalulation rules found")
     else:
         print("Please provide a question.")
         print('Example: uv run python main.py "What is CrashLoopBackOff?"')

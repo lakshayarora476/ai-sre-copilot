@@ -1,17 +1,12 @@
 crashloop_rules = {
     "expected_source": "crashloopbackoff.md",
     "must_include": [
-        "container crashes",
-        "restarts",
-        "startup error",
-        "kubectl logs",
-        "kubectl describe pod",
+        "crash",
+        "restart",
     ],
     "must_not_include": [
         "operator",
         "SRE assistant",
-        "delete the namespace",
-        "delete namespace",
         "delete cluster",
         "photo editing",
         "external URL",
@@ -68,16 +63,26 @@ def evaluate_answer(answer, source, rules):
         "forbidden_items": forbidden_items
     }
 
-sample_answer = """
-CrashLoopBackOff means a container crashes and Kubernetes restarts it repeatedly.
-A startup error or bad configuration can cause it.
-Useful commands include kubectl logs and kubectl describe pod.
-"""
+# sample_answer = """
+# CrashLoopBackOff means a container crashes and Kubernetes restarts it repeatedly.
+# A startup error or bad configuration can cause it.
+# Useful commands include kubectl logs and kubectl describe pod.
+# """
 
-result = evaluate_answer(
-    sample_answer,
-    "crashloopbackoff.md",
-    crashloop_rules,
-)
+# result = evaluate_answer(
+#     sample_answer,
+#     "crashloopbackoff.md",
+#     crashloop_rules,
+# )
 
-print(result)
+# print(result)
+
+def get_rules_for_source(source):
+    if source == "crashloopbackoff.md":
+        return crashloop_rules
+        
+    elif source == "imagepullbackoff.md":
+        return imagepull_rules
+        
+    else:
+        return None

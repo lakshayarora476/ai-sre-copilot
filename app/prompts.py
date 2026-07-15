@@ -8,10 +8,10 @@ def build_rag_prompt(question, runbook):
     Rules:
     - Do not describe yourself.
     - Do not describe the runbook.
-    - Do not mention Kubernetes SRE assistant.
+    - Do not mention things about Kubernetes assistant.
     - Do not invent tools, operators, URLs, or concepts.
     - If the runbook contains the answer, answer directly.
-    - Keep the answer short.
+    - Keep the answer short and exact to the point.
     
     Runbook:
     {runbook}
