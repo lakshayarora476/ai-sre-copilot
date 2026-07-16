@@ -4,6 +4,13 @@ crashloop_rules = {
         "crash",
         "restart",
     ],
+    "should_include" : [
+        "kubectl logs",
+        "kubectl describe pod",
+        "--previous",
+        "startup error",
+        "events"
+    ],
     "must_not_include": [
         "operator",
         "SRE assistant",
@@ -11,6 +18,7 @@ crashloop_rules = {
         "photo editing",
         "external URL",
         "CrLF",
+        "CRBO"
     ],
 }
 
@@ -27,6 +35,13 @@ imagepull_rules = {
         "kubectl describe pod",
         "kubectl get events",
     ],
+    "should_include": [
+        "imagePullSecret",
+        "registry",
+        "authentication",
+        "kubectl describe pod",
+        "kubectl get events"
+    ],
     "must_not_include": [
         "operator",
         "SRE assistant",
@@ -41,6 +56,7 @@ imagepull_rules = {
 def evaluate_answer(answer, source, rules):
     missing_items = []
     forbidden_items = []
+    missing_recommended = []
 
     answer_lower = answer.lower()
 
@@ -49,6 +65,10 @@ def evaluate_answer(answer, source, rules):
     for item in rules['must_include']:
         if item.lower() not in answer_lower:
             missing_items.append(item)
+
+    for item in rules['should_include']:
+        if item.lower() not in answer_lower:
+            missing_recommended.append(item)
 
     for item in rules['must_not_include']:
         if item.lower() in answer_lower:
@@ -60,6 +80,7 @@ def evaluate_answer(answer, source, rules):
         "passed": passed,
         "source_ok": source_ok,
         "missing_items": missing_items,
+        "missing_recommended": missing_recommended,
         "forbidden_items": forbidden_items
     }
 
