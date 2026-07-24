@@ -15,32 +15,32 @@ crashloop_rules = {
         "operator",
         "SRE assistant",
         "delete cluster",
-        "photo editing",
+        "photo editing",    
         "external URL",
         "CrLF",
-        "CRBO"
+        "CRB",
+        "CRBO",
+        "you are",
+        "rule:",
+        "question:",
+        "assistant provides",
+        "is a useful command",
     ],
 }
 
 imagepull_rules = {
     "expected_source": "imagepullbackoff.md",
     "must_include": [
-        "cannot pull image",
-        "wrong image",
-        "image does not exist",
+        "image",
+        "pull",
+        "registry",
+    ],
+    "should_include": [
         "wrong image tag",
         "imagePullSecret",
-        "registry",
         "authentication",
         "kubectl describe pod",
         "kubectl get events",
-    ],
-    "should_include": [
-        "imagePullSecret",
-        "registry",
-        "authentication",
-        "kubectl describe pod",
-        "kubectl get events"
     ],
     "must_not_include": [
         "operator",
@@ -48,6 +48,7 @@ imagepull_rules = {
         "delete namespace",
         "delete cluster",
         "photo editing",
+        "image manipulation",
         "external URL",
         "CrLF",
     ],

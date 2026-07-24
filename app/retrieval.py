@@ -29,12 +29,34 @@ def select_runbook(question):
         "registry auth",
     ]
 
-    for keyword in crashloop_keywords:
-        if keyword in question_lower:
-            return Path("docs/crashloopbackoff.md")
+    crashloop_score = calculate_keyword_score(question_lower, crashloop_keywords)
+    imagepull_score = calculate_keyword_score(question_lower, imagepull_keywords)
+
+    if crashloop_score > imagepull_score:
+        print("CrashLoop score:", crashloop_score)
+        print("ImagePull score:", imagepull_score)
+        return Path("docs/crashloopbackoff.md")
     
-    for keyword in imagepull_keywords:
-        if keyword in question_lower:
-            return Path("docs/imagepullbackoff.md")
+    if imagepull_score > crashloop_score:
+        print("CrashLoop score:", crashloop_score)
+        print("ImagePull score:", imagepull_score)
+        return Path("docs/imagepullbackoff.md")
     
-    return None
+    if (imagepull_score == crashloop_score) and (imagepull_score != 0) and (crashloop_score != 0):
+        print("CrashLoop score:", crashloop_score)
+        print("ImagePull score:", imagepull_score)
+        return None
+    
+    if imagepull_score == 0 and crashloop_score == 0:
+        print("CrashLoop score:", crashloop_score)
+        print("ImagePull score:", imagepull_score)
+        return None
+
+
+def calculate_keyword_score(question, keywords):
+    score = 0
+    question_lower = question.lower()
+    for item in keywords:
+        if item.lower() in question_lower:
+            score+=1
+    return score

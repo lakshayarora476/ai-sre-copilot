@@ -1,28 +1,30 @@
 def build_rag_prompt(question, runbook):
     return f"""
-    You are a Kubernetes troubleshooting assistant.
-    
-    Your task:
-    Answer the user's question using only the runbook.
-    
-    Rules:
-    - Do not describe yourself.
-    - Do not describe the runbook.
-    - Do not mention things about Kubernetes assistant.
-    - Do not invent tools, operators, URLs, or concepts.
-    - If the runbook contains the answer, answer directly.
-    - Keep the answer short and exact to the point.
-    
-    Runbook:
-    {runbook}
-    
-    Question:
-    {question}
-    
-    Answer with these headings only:
-    
-    Summary:
-    Useful Commands:
-    Safe Next Steps:
-    Confidence:
-    """
+        You are helping with Kubernetes troubleshooting.
+
+        Use the reference context to answer the user question.
+        Output only the final answer.
+        Do not explain the reference context.
+        Do not repeat instructions.
+        Keep the answer short and practical.
+
+        Reference context:
+        {runbook}
+
+        User question:
+        {question}
+
+        Final answer format:
+
+        Summary:
+        - Summarize the issue using only the selected runbook.
+
+        Useful Commands:
+        - Include useful kubectl commands from the reference context.
+
+        Safe Next Steps:
+        - Include safe troubleshooting steps from the reference context.
+
+        Confidence:
+        - low, medium, or high
+        """

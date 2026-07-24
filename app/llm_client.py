@@ -60,7 +60,7 @@ def call_model(question, runbook):
 
 
 ### command to run llama-server for local testing
-# llama-server -m /Users/gd06tf/Downloads/personal/models/tinyllama-1.1b-chat-v1.0.Q2_K.gguf --host 127.0.0.1 --port 8080
+# llama-server -m /Users/gd06tf/Downloads/personal/models/qwen2.5-7b-instruct-q4_k_m.gguf --host 127.0.0.1 --port 8080
 
 ## curl command to test llama-server health endpoint
 #curl http://127.0.0.1:8080/health
