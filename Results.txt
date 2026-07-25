@@ -1,0 +1,102 @@
+===== AI SRE Copilot Retrieval Test Results =====
+Generated at: Sat Jul 25 10:53:39 CEST 2026
+
+===== Test 1: OOMKilled basic =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  1
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/oomkilled.md
+no evalulation rules found
+
+===== Test 2: OOMKilled exit code =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  1
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/oomkilled.md
+no evalulation rules found
+
+===== Test 3: OOMKilled memory usage =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  1
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/oomkilled.md
+no evalulation rules found
+
+===== Test 4: OOMKilled memory limit =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  1
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/oomkilled.md
+no evalulation rules found
+
+===== Test 5: OOMKilled memory leak =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  1
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/oomkilled.md
+no evalulation rules found
+
+===== Test 6: CrashLoopBackOff regression =====
+Retrieval scores:
+- crashloopbackoff.md:  1
+- imagepullbackoff.md:  0
+- oomkilled.md:  0
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/crashloopbackoff.md
+
+===== Test 7: ImagePullBackOff regression =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  1
+- oomkilled.md:  0
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/imagepullbackoff.md
+
+===== Test 8: No match DNS =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  0
+Retrieval status:  no_match
+Retrieval confidence:  low
+Selected runbook = None
+
+===== Test 9: No match node not ready =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  0
+- oomkilled.md:  0
+Retrieval status:  no_match
+Retrieval confidence:  low
+Selected runbook = None
+
+===== Test 10: Ambiguous CrashLoop + OOMKilled =====
+No matching runbook found for this question
+
+===== Test 11: Ambiguous ImagePull + CrashLoop =====
+Retrieval scores:
+- crashloopbackoff.md:  0
+- imagepullbackoff.md:  1
+- oomkilled.md:  0
+Retrieval status:  selected
+Retrieval confidence:  medium
+Selected runbook = docs/imagepullbackoff.md
+
+===== Done =====

@@ -1,0 +1,60 @@
+[Test Case 1]
+Selected runbook = docs/crashloopbackoff.md
+Status:  selected
+Confidence:  medium
+CrashLoop score > ImagePull score
+
+[Test Case 2]
+Selected runbook = docs/crashloopbackoff.md
+Status:  selected
+Confidence:  medium
+CrashLoop score > ImagePull score
+
+[Test Case 3]
+Selected runbook = docs/crashloopbackoff.md
+Status:  selected
+Confidence:  medium
+CrashLoop score > ImagePull score
+
+[Test Case 4]
+Selected runbook = docs/imagepullbackoff.md
+Status:  selected
+Confidence:  medium
+ImagePull score > CrashLoop score
+
+[Test Case 5]
+Selected runbook = docs/imagepullbackoff.md
+Status:  selected
+Confidence:  medium
+ImagePull score > CrashLoop score
+
+[Test Case 6]
+Selected runbook = docs/imagepullbackoff.md
+Status:  selected
+Confidence:  high
+ImagePull score > CrashLoop score
+
+[Test Case 7]
+Selected runbook = None
+Status:  no_match
+Confidence:  low
+no match
+
+[Test Case 8]
+Selected runbook = None
+Status:  no_match
+Confidence:  low
+no match
+
+[Test Case 9]
+Selected runbook = None
+Status:  ambiguous
+Confidence:  low
+no match
+
+[Test Case 10]
+Selected runbook = None
+Status:  ambiguous
+Confidence:  low
+no match
+
