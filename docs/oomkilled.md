@@ -1,5 +1,11 @@
 # OOMKilled Runbook
 
+## Key Indicators
+
+- OOMKilled often appears in kubectl describe pod output.
+- exit code 137 is an indicator of an OOMKilled container.
+- The container may be terminated or killed after exceeding its memory limit.
+
 ## Meaning
 
 OOMKilled means a Kubernetes container was terminated because it used more memory than its configured memory limit.

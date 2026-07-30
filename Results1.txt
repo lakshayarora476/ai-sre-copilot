@@ -1,0 +1,374 @@
+===== AI SRE Copilot Retrieval Test Results =====
+Generated at: Sat Jul 25 11:26:16 CEST 2026
+
+===== Test 1: OOMKilled basic =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+- The pod was terminated because it used more memory than its configured memory limit, likely due to the Linux Out-Of-Memory killer.
+
+Useful Commands:
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl top pod <pod-name> -n <namespace>
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+- kubectl get pod <pod-name> -n <namespace> -o yaml
+- kubectl describe node <node-name>
+
+Safe Next Steps:
+- Check pod describe output first
+- Check previous logs before the container restarts again
+- Review memory requests and limits
+- Increase memory limit only after checking actual usage
+- Right-size memory request based on observed usage
+- Investigate possible memory leaks
+- Check if recent deployment changed memory behavior
+- Scale workload carefully if traffic increased
+- Use monitoring to observe
+
+No evaluation rules found
+
+===== Test 2: OOMKilled exit code =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+- The container exit code 137 indicates that the container was OOMKilled, meaning it was terminated due to exceeding its memory limit.
+
+Useful Commands:
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+
+Safe Next Steps:
+- Check pod describe output first
+- Check previous logs before the container restarts again
+- Review memory requests and limits
+- Increase memory limit only after checking actual usage
+- Right-size memory request based on observed usage
+- Investigate possible memory leaks
+
+No evaluation rules found
+
+===== Test 3: OOMKilled memory usage =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+- The pod is using too much memory, which could be due to a memory limit being too low, an application memory leak, a sudden traffic spike, or inefficient memory usage. It might also be related to JVM, Python, Node.js, or Go runtime memory misconfiguration, or improperly configured memory requests and limits.
+
+Useful Commands:
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl top pod <pod-name> -n <namespace>
+- kubectl top pod -n <namespace> --sort-by=memory
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+- kubectl get pod <pod-name> -n <namespace> -o yaml
+- kubectl describe node <node-name>
+
+Safe Next Steps:
+- Check pod describe output first
+- Check previous logs before the container restarts again
+- Review memory requests
+
+No evaluation rules found
+
+===== Test 4: OOMKilled memory limit =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+- The Kubernetes pod was terminated because it exceeded its configured memory limit, which is a common cause of OOMKilled events.
+
+Useful Commands:
+- kubectl get pods -n <namespace>
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl top pod <pod-name> -n <namespace>
+- kubectl top pod -n <namespace> --sort-by=memory
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+- kubectl get pod <pod-name> -n <namespace> -o yaml
+- kubectl describe node <node-name>
+
+Safe Next Steps:
+- Check pod describe output first
+- Check previous logs before the container restarts again
+- Review memory requests and limits
+- Increase memory limit only after checking actual usage
+- Right
+
+No evaluation rules found
+
+===== Test 5: OOMKilled memory leak =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+- The application has a memory leak, causing the pod to repeatedly get killed due to exceeding its memory limit.
+
+Useful Commands:
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl top pod <pod-name> -n <namespace>
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+
+Safe Next Steps:
+- Check pod describe output first to see if it shows OOMKilled.
+- Check previous logs before the container restarts again.
+- Review memory requests and limits.
+- Increase memory limit only after checking actual usage.
+- Investigate possible memory leaks.
+- Check if recent deployment changed memory behavior.
+- Use monitoring to observe memory growth over time.
+
+No evaluation rules found
+
+===== Test 6: CrashLoopBackOff regression =====
+Retrieval scores:
+- crashloopbackoff.md: 2
+- imagepullbackoff.md: 0
+- oomkilled.md: 0
+
+Retrieval status: selected
+Retrieval confidence: high
+Selected runbook: docs/crashloopbackoff.md
+
+Answer:
+Summary:
+Your pod is experiencing a CrashLoopBackOff, indicating it crashes and Kubernetes keeps restarting it.
+
+Useful Commands:
+- kubectl get pods -n <namespace>
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+
+Safe Next Steps:
+- Check pod status
+- Describe the pod and inspect events
+- Check current and previous container logs
+- Check recent deployment or config changes
+- Verify Secrets and ConfigMaps exist
+- Check application startup configuration
+
+Evaluation:
+{'passed': True, 'source_ok': True, 'missing_items': [], 'missing_recommended': ['startup error'], 'forbidden_items': []}
+
+===== Test 7: ImagePullBackOff regression =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 1
+- oomkilled.md: 0
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/imagepullbackoff.md
+
+Answer:
+Summary:
+- This issue indicates that Kubernetes is unable to pull the container image, preventing the pod from starting. Common causes include incorrect image name or tag, non-existent image in the registry, missing imagePullSecret, or network/DNS issues.
+
+Useful Commands:
+- kubectl get pods -n <namespace>
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+- kubectl get secret -n <namespace>
+- kubectl describe secret <secret-name> -n <namespace>
+
+Safe Next Steps:
+- Check the image name and tag
+- Check pod events for image pull errors
+- Verify image exists in the registry
+- Verify imagePullSecret exists
+- Check registry authentication
+- Check network access to the registry
+
+Evaluation:
+{'passed': True, 'source_ok': True, 'missing_items': [], 'missing_recommended': ['wrong image tag'], 'forbidden_items': []}
+
+===== Test 8: No match DNS =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 0
+
+Retrieval status: no_match
+Retrieval confidence: low
+Selected runbook: None
+
+
+===== Test 9: No match node not ready =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 0
+
+Retrieval status: no_match
+Retrieval confidence: low
+Selected runbook: None
+
+
+===== Test 10: CrashLoop + OOMKilled mixed signal =====
+Retrieval scores:
+- crashloopbackoff.md: 2
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/crashloopbackoff.md
+
+Answer:
+Summary:
+The pod is experiencing a CrashLoopBackOff, indicating that it keeps restarting due to an application startup error, memory limit exceeded, or other issues.
+
+Useful Commands:
+- kubectl get pods -n <namespace>
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+
+Safe Next Steps:
+- Check pod status
+- Describe the pod and inspect events
+- Check current and previous container logs
+- Verify memory limits are correctly set and not exceeded
+- Check recent deployment or config changes
+- Verify Secrets and ConfigMaps exist and are correctly configured
+
+Evaluation:
+{'passed': True, 'source_ok': True, 'missing_items': [], 'missing_recommended': [], 'forbidden_items': []}
+
+===== Test 11: ImagePull + CrashLoop ambiguous =====
+Retrieval scores:
+- crashloopbackoff.md: 1
+- imagepullbackoff.md: 1
+- oomkilled.md: 0
+
+Retrieval status: ambiguous
+Retrieval confidence: low
+Selected runbook: None
+
+
+===== Test 12: OOMKilled + logs query =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 0
+- oomkilled.md: 1
+
+Retrieval status: selected
+Retrieval confidence: medium
+Selected runbook: docs/oomkilled.md
+
+Answer:
+Summary:
+When a pod is OOMKilled, it means the container was terminated due to exceeding its memory limit.
+
+Useful Commands:
+- kubectl logs <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+
+Safe Next Steps:
+- Check previous logs before the container restarts again
+- Review memory requests and limits
+- Increase memory limit only after checking actual usage
+- Right-size memory request based on observed usage
+- Investigate possible memory leaks
+
+No evaluation rules found
+
+===== Test 13: ImagePull registry auth =====
+Retrieval scores:
+- crashloopbackoff.md: 0
+- imagepullbackoff.md: 2
+- oomkilled.md: 0
+
+Retrieval status: selected
+Retrieval confidence: high
+Selected runbook: docs/imagepullbackoff.md
+
+Answer:
+Summary:
+- The pod is experiencing an ImagePullBackOff due to a private registry authentication issue.
+
+Useful Commands:
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+
+Safe Next Steps:
+- Verify registry authentication
+- Check network access to the registry
+
+Evaluation:
+{'passed': True, 'source_ok': True, 'missing_items': [], 'missing_recommended': ['wrong image tag', 'imagePullSecret'], 'forbidden_items': []}
+
+===== Test 14: CrashLoop startup failure =====
+Retrieval scores:
+- crashloopbackoff.md: 2
+- imagepullbackoff.md: 0
+- oomkilled.md: 0
+
+Retrieval status: selected
+Retrieval confidence: high
+Selected runbook: docs/crashloopbackoff.md
+
+Answer:
+Summary:
+- The pod is experiencing a CrashLoopBackOff due to an application startup error.
+
+Useful Commands:
+- kubectl get pods -n <namespace>
+- kubectl describe pod <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace>
+- kubectl logs <pod-name> -n <namespace> --previous
+- kubectl get events -n <namespace> --sort-by=.lastTimestamp
+
+Safe Next Steps:
+- Check pod status
+- Describe the pod and inspect events
+- Check current and previous container logs
+- Check recent deployment or config changes
+- Verify Secrets and ConfigMaps exist
+- Check application startup configuration
+
+Evaluation:
+{'passed': False, 'source_ok': True, 'missing_items': ['restart'], 'missing_recommended': [], 'forbidden_items': []}
+
+===== Done =====

@@ -5,7 +5,7 @@ from app.llm_client import call_model, model_exists
 from app.eval_rules import evaluate_answer, get_rules_for_source
 
 
-QUESTION = "container cannot pull image"
+QUESTION = "pod was oomkilled"
 RUNS = 5
 
 
@@ -15,7 +15,7 @@ def main():
         return
 
     runbook_path = select_runbook(QUESTION)
-
+    runbook_path = runbook_path['selected_path']
     if runbook_path is None:
         print("No matching runbook found")
         return

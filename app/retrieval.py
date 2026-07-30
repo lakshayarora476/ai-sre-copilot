@@ -1,11 +1,38 @@
 from pathlib import Path
 
+
 def read_runbook(runbook_path):
     return runbook_path.read_text()
 
-def select_runbook(question):
+
+def calculate_keyword_score(question, keywords):
+    score = 0
     question_lower = question.lower()
 
+    for item in keywords:
+        if item.lower() in question_lower:
+            score += 1
+
+    return score
+
+
+def get_confidence(top_score, second_score, status):
+    if status in ["no_match", "ambiguous"]:
+        return "low"
+
+    if second_score > 0:
+        return "medium"
+
+    if top_score >= 2:
+        return "high"
+
+    if top_score == 1:
+        return "medium"
+
+    return "low"
+
+
+def select_runbook(question):
     crashloop_keywords = [
         "crashloop",
         "crash loop",
@@ -44,98 +71,53 @@ def select_runbook(question):
         "too much memory",
     ]
 
-    crashloop_score = calculate_keyword_score(question_lower, crashloop_keywords)
-    imagepull_score = calculate_keyword_score(question_lower, imagepull_keywords)
-    oomkilled_score = calculate_keyword_score(question_lower, oomkilled_keywords)
+    scores = {
+        "crashloopbackoff.md": calculate_keyword_score(question, crashloop_keywords),
+        "imagepullbackoff.md": calculate_keyword_score(question, imagepull_keywords),
+        "oomkilled.md": calculate_keyword_score(question, oomkilled_keywords),
+    }
 
-    highest_score = high_score(crashloop_score,imagepull_score,oomkilled_score)
-    if highest_score != None:
-        if highest_score >= 2:
-            confidence = "high"
-        if highest_score == 1:
-            confidence = "medium"
-        if highest_score == 0:
-            confidence = "low"
-    else:
-        confidence = "low"
+    max_score = max(scores.values())
 
-   #if max(crashloop_score,imagepull_score,oomkilled_score) == crashloop_score and crashloop_score != 0:
-    if crashloop_score > imagepull_score and crashloop_score > oomkilled_score:
-        return {
-            "selected_path": Path("docs/crashloopbackoff.md"),
-            "scores" : {
-                "crashloopbackoff.md" : crashloop_score,
-                "imagepullbackoff.md" : imagepull_score,
-                "oomkilled.md" : oomkilled_score
-            },
-            "status": "selected",
-            "confidence": confidence
-        }
-            
-    
-    #if max(crashloop_score,imagepull_score,oomkilled_score) == imagepull_score and imagepull_score != 0:
-    if imagepull_score > crashloop_score and imagepull_score > oomkilled_score:
-        return {
-            "selected_path": Path("docs/imagepullbackoff.md"),
-            "scores" : {
-                "imagepullbackoff.md" : imagepull_score,
-                "crashloopbackoff.md" : crashloop_score,
-                "oomkilled.md" : oomkilled_score
-            },
-            "status": "selected",
-            "confidence": confidence
-        }
-
-    #if max(crashloop_score,imagepull_score,oomkilled_score) == oomkilled_score and oomkilled_score != 0:
-    if oomkilled_score > crashloop_score and oomkilled_score > imagepull_score:
-        return {
-            "selected_path": Path("docs/oomkilled.md"),
-            "scores" : {
-                "oomkilled.md" : oomkilled_score,
-                "imagepullbackoff.md" : imagepull_score,
-                "crashloopbackoff.md" : crashloop_score
-            },
-            "status": "selected",
-            "confidence": confidence
-        }        
-    
-    if (imagepull_score == crashloop_score == oomkilled_score) and all([crashloop_score, imagepull_score, oomkilled_score]):
+    if max_score == 0:
         return {
             "selected_path": None,
-            "scores": {
-                "crashloopbackoff.md": crashloop_score,
-                "imagepullbackoff.md": imagepull_score,
-                "oomkilled.md" : oomkilled_score
-            },
-            "status": "ambiguous",
-            "confidence": "low",
-            "comparison": "ambiguous"
-        }
-    
-    if imagepull_score == 0 and crashloop_score == 0 and oomkilled_score == 0:
-        return {
-            "selected_path": None,
-            "scores": {
-                "crashloopbackoff.md": crashloop_score,
-                "imagepullbackoff.md": imagepull_score,
-                "oomkilled.md" : oomkilled_score
-            },
+            "scores": scores,
             "status": "no_match",
             "confidence": "low",
-            "comparison": "no match"
         }
 
+    top_matches = [ runbook_name for runbook_name, score in scores.items() if score == max_score ]
 
-def calculate_keyword_score(question, keywords):
-    score = 0
-    question_lower = question.lower()
-    for item in keywords:
-        if item.lower() in question_lower:
-            score+=1
-    return score
+    if len(top_matches) > 1:
+        return {
+            "selected_path": None,
+            "scores": scores,
+            "status": "ambiguous",
+            "confidence": "low",
+        }
 
-def high_score(crashloop_score,imagepull_score,oomkilled_score):
-    if crashloop_score == 0 and imagepull_score == 0 and oomkilled_score == 0:
-        return None
-    else:
-        return max(crashloop_score, imagepull_score, oomkilled_score)
+    selected_runbook = top_matches[0]
+
+    sorted_scores = sorted(scores.values(), reverse=True)
+    top_score = sorted_scores[0]
+    second_score = sorted_scores[1]
+
+    confidence = get_confidence(
+        top_score=top_score,
+        second_score=second_score,
+        status="selected",
+    )
+
+    runbook_paths = {
+        "crashloopbackoff.md": Path("docs/crashloopbackoff.md"),
+        "imagepullbackoff.md": Path("docs/imagepullbackoff.md"),
+        "oomkilled.md": Path("docs/oomkilled.md"),
+    }
+
+    return {
+        "selected_path": runbook_paths[selected_runbook],
+        "scores": scores,
+        "status": "selected",
+        "confidence": confidence,
+    }

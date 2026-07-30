@@ -54,6 +54,42 @@ imagepull_rules = {
     ],
 }
 
+oomkilled_rules = {
+    "expected_source": "oomkilled.md",
+    "must_include": [
+        "memory",
+    ],
+    "should_include" : [
+        "kubectl logs",
+        "kubectl describe pod",
+        "kubectl top pod",
+        "--previous",
+        "out-of-memory",
+        "oom",
+        "memory limit",
+        "memory leak",
+        "memory pressure",
+        "exit code 137",
+        "terminated",
+        "killed",
+    ],
+    "must_not_include": [
+        "operator",
+        "SRE assistant",
+        "delete cluster",
+        "photo editing",    
+        "external URL",
+        "CrLF",
+        "CRB",
+        "CRBO",
+        "you are",
+        "rule:",
+        "question:",
+        "assistant provides",
+        "is a useful command",
+    ],
+}
+
 def evaluate_answer(answer, source, rules):
     missing_items = []
     forbidden_items = []
@@ -103,8 +139,11 @@ def get_rules_for_source(source):
     if source == "crashloopbackoff.md":
         return crashloop_rules
         
-    elif source == "imagepullbackoff.md":
+    if source == "imagepullbackoff.md":
         return imagepull_rules
+
+    if source == "oomkilled.md":
+        return oomkilled_rules
         
     else:
         return None
