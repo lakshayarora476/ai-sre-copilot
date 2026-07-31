@@ -28,6 +28,7 @@ def main():
     print("- crashloopbackoff.md:", scores["crashloopbackoff.md"])
     print("- imagepullbackoff.md:", scores["imagepullbackoff.md"])
     print("- oomkilled.md:", scores["oomkilled.md"])
+    print("- pending-pod.md:", scores["pending-pod.md"])
     print()
     print("Retrieval status:", status)
     print("Retrieval confidence:", confidence)

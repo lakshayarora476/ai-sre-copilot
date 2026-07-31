@@ -90,6 +90,41 @@ oomkilled_rules = {
     ],
 }
 
+pending_pod_rules = {
+    "expected_source": "pending-pod.md",
+    "must_include": [
+        "pending",
+        "schedule",
+    ],
+    "should_include": [
+        "kubectl describe pod",
+        "events",
+        "failedscheduling",
+        "insufficient cpu",
+        "insufficient memory",
+        "taint",
+        "toleration",
+        "node affinity",
+        "pvc",
+        "resource quota",
+        ],
+    "must_not_include": [
+        "operator",
+        "SRE assistant",
+        "delete cluster",
+        "photo editing",
+        "external URL",
+        "CrLF",
+        "CRB",
+        "CRBO",
+        "you are",
+        "rule:",
+        "question:",
+        "assistant provides",
+        "is a useful command",
+    ],
+}
+
 def evaluate_answer(answer, source, rules):
     missing_items = []
     forbidden_items = []
@@ -121,19 +156,6 @@ def evaluate_answer(answer, source, rules):
         "forbidden_items": forbidden_items
     }
 
-# sample_answer = """
-# CrashLoopBackOff means a container crashes and Kubernetes restarts it repeatedly.
-# A startup error or bad configuration can cause it.
-# Useful commands include kubectl logs and kubectl describe pod.
-# """
-
-# result = evaluate_answer(
-#     sample_answer,
-#     "crashloopbackoff.md",
-#     crashloop_rules,
-# )
-
-# print(result)
 
 def get_rules_for_source(source):
     if source == "crashloopbackoff.md":
@@ -144,6 +166,9 @@ def get_rules_for_source(source):
 
     if source == "oomkilled.md":
         return oomkilled_rules
+
+    if source == "pending-pod.md":
+        return pending_pod_rules
         
     else:
         return None

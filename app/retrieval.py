@@ -71,10 +71,31 @@ def select_runbook(question):
         "too much memory",
     ]
 
+    pending_keywords = [
+        "pending",
+        "pod pending",
+        "stuck pending",
+        "failed scheduling",
+        "failedscheduling",
+        "cannot schedule",
+        "not scheduled",
+        "insufficient cpu",
+        "insufficient memory",
+        "node selector",
+        "node affinity",
+        "taint",
+        "toleration",
+        "pvc pending",
+        "persistentvolumeclaim",
+        "resource quota",
+        "unschedulable",
+    ]
+
     scores = {
         "crashloopbackoff.md": calculate_keyword_score(question, crashloop_keywords),
         "imagepullbackoff.md": calculate_keyword_score(question, imagepull_keywords),
         "oomkilled.md": calculate_keyword_score(question, oomkilled_keywords),
+        "pending-pod.md": calculate_keyword_score(question, pending_keywords),
     }
 
     max_score = max(scores.values())
@@ -113,6 +134,7 @@ def select_runbook(question):
         "crashloopbackoff.md": Path("docs/crashloopbackoff.md"),
         "imagepullbackoff.md": Path("docs/imagepullbackoff.md"),
         "oomkilled.md": Path("docs/oomkilled.md"),
+        "pending-pod.md": Path("docs/pending-pod.md"),
     }
 
     return {

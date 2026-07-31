@@ -5,7 +5,7 @@ from app.llm_client import call_model, model_exists
 from app.eval_rules import evaluate_answer, get_rules_for_source
 
 
-QUESTION = "pod was oomkilled"
+QUESTION = "pod stuck in pending"
 RUNS = 5
 
 
