@@ -82,7 +82,7 @@ def main():
             actual_runbook = None
         else:
             actual_runbook = selected_path.name
-
+            
         passed = (
             actual_status == expected_status
             and actual_runbook == expected_runbook

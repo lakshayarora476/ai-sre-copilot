@@ -1,0 +1,8 @@
+1. my app is running out of RAM
+2. container is being terminated due to memory
+3. scheduler cannot place my pod
+4. workload is waiting for a node
+5. pod cannot download container image
+6. registry login is failing
+7. app starts and exits immediately
+8. pod restarts again and again
