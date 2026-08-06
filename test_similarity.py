@@ -1,13 +1,21 @@
-from app.embedding_client import get_embedding
-from app.semantic_retrieval import cosine_similarity
+from app.semantic_retrieval import retrieve_semantic
 
 
-text_1 = "my app is running out of RAM"
-text_2 = "container uses too much memory"
+questions = [
+    "my pod keeps restarting again and again",
+    "container exceeded its memory limit",
+    "image cannot be downloaded from registry",
+    "workload is waiting for node assignment",
+]
 
-embedding_1 = get_embedding(text_1)
-embedding_2 = get_embedding(text_2)
+for question in questions:
+    result = retrieve_semantic(question)
 
-score = cosine_similarity(embedding_1, embedding_2)
+    print()
+    print("Question:", question)
+    print("Selected:", result["selected_path"])
+    print("Score:", result["score"])
 
-print("Similarity score:", score)
+    print("All scores:")
+    for item in result["results"]:
+        print(" ", item["path"], item["score"])
