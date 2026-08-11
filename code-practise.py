@@ -4,10 +4,16 @@ from app.embedding_client import get_embedding
 
 RUNBOOK_RETRIEVAL_TEXT = {
     "crashloopbackoff.md": """
-    Kubernetes pod keeps restarting repeatedly.
-    Container starts then crashes again and again.
+    CrashLoopBackOff.
+    Crash loop.
+    Kubernetes pod crash loop.
+    Pod keeps restarting.
+    Pod keeps restarting again and again.
+    Container repeatedly crashes after starting.
+    Container starts and exits repeatedly.
+    Application fails during startup.
     CrashLoopBackOff troubleshooting.
-    Check container logs, exit code, command, probes, and application startup errors.
+    Check container logs, previous logs, exit code, command, probes, missing environment variables, config, secrets, and application startup errors.
     """,
 
     "imagepullbackoff.md": """
@@ -42,9 +48,6 @@ RUNBOOK_RETRIEVAL_TEXT = {
     Check insufficient CPU, insufficient memory, taints, tolerations, node selectors, affinity, PVC binding, and node availability.
     """,
 }
-
-vector1 = [1, 2, 3]
-vector2 = [4, 5, 6]
 
 def cosine_similarity(a, b):
     result_dot_product = math.sumprod(a,b)
@@ -83,7 +86,7 @@ def practice_semantic_flow(question):
 def embed_one_runbook():
     runbook_data = load_runbooks()
     first_runbook = runbook_data[0]
-    first_runbook_content = runbook_data[0]['content'][:1000]
+    first_runbook_content = first_runbook['content'][:1000]
     embedding = convert_to_embedding(first_runbook_content)
     print("First runbook path: ",first_runbook['path'])
     print("First runbook embedding length: ",len(embedding))
@@ -97,4 +100,43 @@ def compare_question_with_one_runbook(question):
     print("Runbook path:", runbook_path)
     print("similarity score: ", score)
 
-compare_question_with_one_runbook("what is crashloop")
+#compare_question_with_one_runbook("what is crashloop")
+
+def compare_question_with_all_runbooks(question):
+    results = []
+    embedded_question = convert_to_embedding(question)
+    all_runbooks = load_runbooks()
+    for runbook in all_runbooks:
+        runbook_path = runbook['path']
+        file_name = Path(runbook['path']).name
+        retrieval_text = RUNBOOK_RETRIEVAL_TEXT[file_name]
+        embedded_filtered_runbook = convert_to_embedding(retrieval_text)
+        score = cosine_similarity(embedded_question,embedded_filtered_runbook)
+        results.append({
+            "path": runbook_path,
+            "score": score
+        })
+    results = sorted(results, key=lambda item: item["score"], reverse=True)
+    best = results[0]
+    second_best = results[1]
+    score_gap = best['score'] - second_best['score']
+    minimum_score = 0.60
+    if best['score'] < minimum_score:
+        status = "no_match"
+        confidence = "low"
+    elif score_gap < 0.03:
+        status = "ambiguous"
+        confidence = "low"
+    else:
+        status = "selected"
+        confidence = "high"
+    selected_path = None if status == "no_match" else best["path"]
+    return {
+        "selected_path": selected_path,
+        "status": status,
+        "confidence": confidence,
+        "score_gap": score_gap,
+        "scores": results,
+    }    
+result = compare_question_with_all_runbooks("my pod keeps restarting again and again")
+print(result)
