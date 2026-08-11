@@ -68,7 +68,7 @@ def load_runbooks():
 def convert_to_embedding(question):
     vector = get_embedding(question)
     return vector
-convert_to_embedding("what is k8s pod crash")
+#convert_to_embedding("what is k8s pod crash")
 
 def practice_semantic_flow(question):
     question_embedding = convert_to_embedding(question)
@@ -78,7 +78,23 @@ def practice_semantic_flow(question):
         result_list.append(runbook['path'])
     print("Embedding length: ",(len(question_embedding)))
     print("Runbooks path: ", result_list)
-practice_semantic_flow("what is k8s pod crash")
+#practice_semantic_flow("what is k8s pod crash")
 
+def embed_one_runbook():
+    runbook_data = load_runbooks()
+    first_runbook = runbook_data[0]
+    first_runbook_content = runbook_data[0]['content'][:1000]
+    embedding = convert_to_embedding(first_runbook_content)
+    print("First runbook path: ",first_runbook['path'])
+    print("First runbook embedding length: ",len(embedding))
+    return first_runbook['path'], embedding
+#embed_one_runbook()
 
+def compare_question_with_one_runbook(question):
+    embedded_question = convert_to_embedding(question)
+    runbook_path, embedded_first_runbook = embed_one_runbook()
+    score = cosine_similarity(embedded_question,embedded_first_runbook)
+    print("Runbook path:", runbook_path)
+    print("similarity score: ", score)
 
+compare_question_with_one_runbook("what is crashloop")
