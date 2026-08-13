@@ -2,7 +2,6 @@ from pathlib import Path
 import math
 from app.embedding_client import get_embedding
 
-DOCS_DIR = Path("docs")
 RUNBOOK_RETRIEVAL_TEXT = {
     "crashloopbackoff.md": """
     Kubernetes pod keeps restarting repeatedly.
@@ -56,45 +55,53 @@ def cosine_similarity(a, b):
 
 
 def load_runbooks():
-    runbooks = []
-    for path in DOCS_DIR.glob("*.md"):
-        content = path.read_text(encoding="utf-8")
-        runbooks.append(
-            {
-                "path": str(path),
-                "content": content,
-            }
-        )
+    doc_path = Path('docs')
+    result = []
+    for files in doc_path.rglob("*.md"):
+        text = files.read_text(encoding="utf-8")
+        result.append({"path" : str(files), "content" : text})
+    return result
 
-    return runbooks
+def convert_to_embedding(question):
+    vector = get_embedding(question)
+    return vector
 
-
-def retrieve_semantic(question):
-    question_embedding = get_embedding(question)
-    runbooks = load_runbooks()
-
+def semantic_retrieve(question):
     results = []
-
-    for runbook in runbooks:
-        file_name = Path(runbook["path"]).name
+    embedded_question = convert_to_embedding(question)
+    all_runbooks = load_runbooks()
+    for runbook in all_runbooks:
+        runbook_path = runbook['path']
+        file_name = Path(runbook['path']).name
         retrieval_text = RUNBOOK_RETRIEVAL_TEXT[file_name]
-        doc_embedding = get_embedding(retrieval_text)
-        score = cosine_similarity(question_embedding, doc_embedding)
-
-        results.append(
-            {
-                "path": runbook["path"],
-                "score": score,
-            }
-        )
-
-    results.sort(key=lambda item: item["score"], reverse=True)
-
+        embedded_filtered_runbook = convert_to_embedding(retrieval_text)
+        score = cosine_similarity(embedded_question,embedded_filtered_runbook)
+        results.append({
+            "path": runbook_path,
+            "score": score
+        })
+    results = sorted(results, key=lambda item: item["score"], reverse=True)
     best = results[0]
-
+    second_best = results[1]
+    score_gap = best['score'] - second_best['score']
+    minimum_score = 0.60
+    if best['score'] < minimum_score:
+        status = "no_match"
+        confidence = "low"
+    elif score_gap < 0.03:
+        status = "ambiguous"
+        confidence = "low"
+    else:
+        status = "selected"
+        confidence = "high"
+    selected_path = None if status == "no_match" else best["path"]
     return {
-        "selected_path": best["path"],
-        "score": best["score"],
-        "status": "selected",
-        "results": results,
-    }
+        "selected_path": selected_path,
+        "status": status,
+        "confidence": confidence,
+        "score_gap": score_gap,
+        "scores": results,
+    }    
+if __name__ == "__main__":
+    result = semantic_retrieve("my pod keeps restarting again and again")
+    print(result)

@@ -62,6 +62,7 @@ def cosine_similarity(a, b):
 
 def load_runbooks():
     doc_path = Path('docs')
+    print(doc_path)
     result = []
     for files in doc_path.rglob("*.md"):
         text = files.read_text(encoding="utf-8")
