@@ -1,5 +1,6 @@
 from app.semantic_retrieval import semantic_retrieve
 
+
 TEST_CASES = [
     {
         "question": "image cannot be pulled from registry",
@@ -16,7 +17,23 @@ TEST_CASES = [
         "expected_status": "ambiguous",
         "expected_path": "docs/crashloopbackoff.md",
     },
+    {
+        "question": "pod cannot download container image",
+        "expected_status": "selected",
+        "expected_path": "docs/imagepullbackoff.md",
+    },
+    {
+        "question": "scheduler cannot place my pod",
+        "expected_status": "ambiguous",
+        "expected_path": "docs/pending-pod.md",
+    },
+    {
+        "question": "container is being terminated because of memory",
+        "expected_status": "selected",
+        "expected_path": "docs/oomkilled.md",
+    },
 ]
+
 
 def main():
     passed_tests = 0
@@ -46,6 +63,7 @@ def main():
         print("Actual status:", actual_status)
         print("Expected path:", test_case["expected_path"])
         print("Actual path:", actual_path)
+        print("Scores:", result["scores"])
         print("Passed:", passed)
         print("=============================================")
 
