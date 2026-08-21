@@ -1,7 +1,7 @@
 ===== AI SRE Copilot Retrieval Test Results =====
 Generated at: Sat Jul 25 11:26:16 CEST 2026
 
-===== Test 1: OOMKilled basic ======
+===== Test 1: OOMKilled basic ========
 Retrieval scores:
 - crashloopbackoff.md: 0
 - imagepullbackoff.md: 0
